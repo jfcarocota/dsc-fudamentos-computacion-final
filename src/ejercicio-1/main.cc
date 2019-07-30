@@ -49,6 +49,8 @@ el archivo expres.out podría contener
 
 std::string data;
 
+std::vector<char> vecData;
+
 /// <summary>
 ///Imprime un objeto string en consola
 ///</summary>
@@ -67,61 +69,30 @@ std::string fileToString(std::ifstream& file)
     return content;
 }
 
+void FillVector(std::string &data, std::vector<char> &vecData)
+{
+    for(int i = 0; i < data.size(); i++)
+    {
+        vecData.push_back(data[i]);
+    }
+}
+
 int main()
 {
-
-    //ReadFile("src/ejercicio-1/express.in");
     std::ifstream in("src/ejercicio-1/express.in");
-    std::ifstream out("express.out");
-    //data = fileToString(inf);
+    std::ifstream out("src/ejercicio-1/express.out");
     std::cout << data << std::endl;
+
     if(in.is_open())
     {
         std::getline(in, data);
         PrintString("Data cargada, pulse cualquier tecla para continuar...");
         std::getchar();
         
-        const char* datachar = data.data();
-        for(int i = 0; i < data.size(); i++)
+        FillVector(data, vecData);
+        for(int i = 0; i < vecData.size(); i++)
         {
-            std::cout << data[i] << std::endl;
-            switch(data[i])
-            {
-                case '(' :
-                    break;
-                case ')' :
-                    break;
-                case '+' :
-                    break;
-                case '*' :
-                    break;
-                case '{' :
-                    break;
-                case '}' :
-                    break;
-                case ',' :
-                    break;
-                case '0' :
-                    break;
-                case '1' :
-                    break;
-                case '2' :
-                    break;
-                case '3' :
-                    break;
-                case '4' :
-                    break;
-                case '5' :
-                    break;
-                case '6' :
-                    break;
-                case '7' :
-                    break;
-                case '8' :
-                    break;
-                case '9' :
-                    break;
-            }
+            std::cout << vecData[i] << std::endl;
         }
     } 
     else
@@ -130,6 +101,7 @@ int main()
     }
     in.close();
 
+    
     //PrintString(data);
 
     std::getchar();
