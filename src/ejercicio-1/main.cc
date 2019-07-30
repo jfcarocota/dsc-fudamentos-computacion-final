@@ -43,17 +43,14 @@ el archivo expres.out podría contener
 #include<vector>
 #include<fstream>
 #include<string>
-//std::vector<std::vector<int>> vec2 = {{1, 2}, {2}};
-
-//std::string fileToString(std::ifstream file);
+#include<algorithm>
+#include<sstream>
 
 std::string data;
-
 std::vector<char> vecData;
+std::ifstream in("src/ejercicio-1/express.in");
+std::ifstream out("src/ejercicio-1/express.out");
 
-/// <summary>
-///Imprime un objeto string en consola
-///</summary>
 void PrintString(const std::string data)
 {
     std::cout << data << std::endl;
@@ -69,7 +66,7 @@ std::string fileToString(std::ifstream& file)
     return content;
 }
 
-void FillVector(std::string &data, std::vector<char> &vecData)
+void FillVector(const std::string &data, std::vector<char> &vecData)
 {
     for(int i = 0; i < data.size(); i++)
     {
@@ -77,13 +74,40 @@ void FillVector(std::string &data, std::vector<char> &vecData)
     }
 }
 
+std::vector<std::string> Concatenate2Vector(const std::vector<std::string> a, const std::vector<std::string> b)
+{
+    std::vector<std::string> result;
+    result.reserve(a.size() + b.size());
+    result.insert(result.end(), a.begin(), a.end());
+    result.insert(result.end(), b.begin(), b.end());
+    
+    return result;
+}
+
+std::vector<std::string> operator * (const std::vector<std::string> setA, const std::vector<std::string> setB)
+{
+    std::vector<std::string> result;
+    result = Concatenate2Vector(setA, setB);
+
+    return result;
+}
+
+std::vector<int> StrVec2IntegerVec(const std::vector<std::string> strvec)
+{
+    std::vector<int> result;
+    for(int i = 0; i < strvec.size(); i++)
+    {
+        int conversion = 0;
+        std::istringstream iss(strvec[i]);
+        iss >> conversion;
+        result.push_back(conversion);
+    }
+    return result;
+}
+
 int main()
 {
-    std::ifstream in("src/ejercicio-1/express.in");
-    std::ifstream out("src/ejercicio-1/express.out");
-    std::cout << data << std::endl;
-
-    if(in.is_open())
+    /* if(in.is_open())
     {
         std::getline(in, data);
         PrintString("Data cargada, pulse cualquier tecla para continuar...");
@@ -99,10 +123,19 @@ int main()
     {
          std::cout << "Unable to open file";
     }
-    in.close();
+    in.close();*/
 
-    
-    //PrintString(data);
+    std::vector<std::string> vectorA {"1", "2", "3"};
+    std::vector<std::string> vectorB {"1", "22", "4"};
+
+    std::vector<std::string> vecResult = Concatenate2Vector(vectorA, vectorB);
+    std::vector<int> vecint = StrVec2IntegerVec(vecResult);
+    std::sort(vecint.begin(), vecint.end());
+
+    for(int i = 0; i < vecint.size(); i++)
+    {
+        std::cout << vecint[i] << std::endl;
+    }
 
     std::getchar();
 }
