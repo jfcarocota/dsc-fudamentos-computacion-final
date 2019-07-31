@@ -45,6 +45,7 @@ el archivo expres.out podría contener
 #include<string>
 #include<algorithm>
 #include<sstream>
+#include <numeric>
 
 std::string data;
 std::vector<char> vecData;
@@ -84,14 +85,6 @@ std::vector<std::string> Concatenate2Vector(const std::vector<std::string> a, co
     return result;
 }
 
-std::vector<std::string> operator * (const std::vector<std::string> setA, const std::vector<std::string> setB)
-{
-    std::vector<std::string> result;
-    result = Concatenate2Vector(setA, setB);
-
-    return result;
-}
-
 std::vector<int> StrVec2IntegerVec(const std::vector<std::string> strvec)
 {
     std::vector<int> result;
@@ -103,6 +96,60 @@ std::vector<int> StrVec2IntegerVec(const std::vector<std::string> strvec)
         result.push_back(conversion);
     }
     return result;
+}
+
+std::string StrVec2string(std::vector<std::string> strvec)
+{
+    return std::accumulate(strvec.begin(), strvec.end(), std::string{});
+}
+
+std::vector<std::string> IntegerVec2StrVec(const std::vector<int> intvec)
+{
+    std::vector<std::string> result;
+    for(int i = 0; i < intvec.size(); i++)
+    {
+        std::stringstream ss;
+        ss << intvec[i];
+        result.push_back(ss.str());
+    }
+    return result;
+}
+
+std::vector<int> KeepSimilarComponents(const std::vector<int> dirtyVec)
+{
+    std::vector<int> result;
+    for(int i = 1; i < dirtyVec.size(); i++)
+    {
+        if(dirtyVec[i - 1] == dirtyVec[i])
+        {
+            result.push_back(dirtyVec[i]); 
+        }
+    }
+    return result;
+}
+
+std::string AddSeperator2Characters(std::string cleanString)
+{
+    std::stringstream ss;
+    ss << cleanString[0];
+    for (int i = 1; i < cleanString.size(); i++) {
+        ss << ',' << cleanString[i];
+    }
+    return ss.str();
+}
+
+std::string SumSets (const std::vector<std::string> setA, const std::vector<std::string> setB)
+{
+    std::vector<std::string> result;
+    result = Concatenate2Vector(setA, setB);
+    std::vector<int> intvec = StrVec2IntegerVec(result);
+    std::sort(intvec.begin(), intvec.end());
+    intvec = KeepSimilarComponents(intvec);
+    result = IntegerVec2StrVec(intvec);
+    std::string formatedString = StrVec2string(result);
+    formatedString = AddSeperator2Characters(formatedString);
+    formatedString = "{" + formatedString + "}";
+    return formatedString;
 }
 
 int main()
@@ -125,17 +172,18 @@ int main()
     }
     in.close();*/
 
-    std::vector<std::string> vectorA {"1", "2", "3"};
-    std::vector<std::string> vectorB {"1", "22", "4"};
+    std::vector<std::string> vectorA {"1","3","9","77"};
+    std::vector<std::string> vectorB {"7","1","193"};
 
-    std::vector<std::string> vecResult = Concatenate2Vector(vectorA, vectorB);
+    /*std::vector<std::string> vecResult = Concatenate2Vector(vectorA, vectorB);
     std::vector<int> vecint = StrVec2IntegerVec(vecResult);
     std::sort(vecint.begin(), vecint.end());
-
-    for(int i = 0; i < vecint.size(); i++)
-    {
-        std::cout << vecint[i] << std::endl;
-    }
+    vecint = KeepSimilarComponents(vecint);
+    vecResult.clear();
+    vecResult = IntegerVec2StrVec(vecint);
+    std::string finalResult = StrVec2string(vecResult);
+    finalResult = "{" + AddSeperator2Characters(finalResult) + "}";*/
+    std::cout << SumSets(vectorA, vectorB) << std::endl;
 
     std::getchar();
 }
