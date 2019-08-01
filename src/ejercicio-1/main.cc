@@ -128,7 +128,7 @@ std::vector<int> KeepSimilarComponents(const std::vector<int> dirtyVec)
     return result;
 }
 
-std::string AddSeperator2Characters(std::string cleanString)
+std::string AddSeperator2Characters(const std::string cleanString)
 {
     std::stringstream ss;
     ss << cleanString[0];
@@ -152,6 +152,43 @@ std::string SumSets (const std::vector<std::string> setA, const std::vector<std:
     return formatedString;
 }
 
+bool ThisStringIsNumber(const char s)
+{
+    return s != std::string::npos;
+}
+
+std::vector<std::string> FindVectorInString(const std::string data)
+{
+    std::vector<std::string> result;
+    bool vecFinded = false;
+    for(int i = 1; i < data.size(); i++)
+    {
+        char s = data[i];
+        if(!vecFinded)
+        {
+            vecFinded = s == '{';
+            continue;
+        }
+        if (vecFinded)
+        {
+            if(s == '}')
+            {
+                return result;
+            }
+            else if(s == ',')
+            {
+                continue;
+            }
+            else if(ThisStringIsNumber(s))
+            {
+                std::string str(1, s);
+                result.push_back(str);
+            }
+        }
+    }
+    return result;
+}
+
 int main()
 {
     /* if(in.is_open())
@@ -172,8 +209,8 @@ int main()
     }
     in.close();*/
 
-    std::vector<std::string> vectorA {"1","3","9","77"};
-    std::vector<std::string> vectorB {"7","1","193"};
+    //std::vector<std::string> vectorA {"1","3","9","77"};
+    //std::vector<std::string> vectorB {"7","1","193"};
 
     /*std::vector<std::string> vecResult = Concatenate2Vector(vectorA, vectorB);
     std::vector<int> vecint = StrVec2IntegerVec(vecResult);
@@ -183,7 +220,15 @@ int main()
     vecResult = IntegerVec2StrVec(vecint);
     std::string finalResult = StrVec2string(vecResult);
     finalResult = "{" + AddSeperator2Characters(finalResult) + "}";*/
-    std::cout << SumSets(vectorA, vectorB) << std::endl;
+    //std::cout << SumSets(vectorA, vectorB) << std::endl;
+
+    std::string myData = "({1,2,3,4,5})";
+
+    std::vector<std::string> resultvec = FindVectorInString(myData);
+    for(int i = 0; i < resultvec.size(); i++)
+    {
+        std::cout << resultvec[i] << std::endl;
+    }
 
     std::getchar();
 }
